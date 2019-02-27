@@ -1,0 +1,39 @@
+{% extends 'indexTemplate.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+        <div class="card example-1 square scrollbar-cyan bordered-cyan mt-5 text-center">
+            <table class="table">
+                <thead class="black white-text">
+                <tr>
+                    <th class="th-sm">Decripción breve</th>
+                    <th class="th-sm d-none d-sm-table-cell">Fecha</th>
+                    <th class="th-sm">Prioridad</th>
+                    <th class="th-sm d-none d-sm-table-cell">Estado</th>
+                    <th class="th-sm d-none d-lg-table-cell">Categoria</th>
+                    <th class="th-sm d-none d-lg-table-cell">Técnico</th>
+                </tr>
+                </thead>
+                <tbody id="tablaEventosBusqueda">
+                {% for incidencia in incidencias %}
+                    <tr>
+                        <td>{{ incidencia.descripcion_breve }}</td>
+                        <td class="d-none d-sm-table-cell">{{ incidencia.fecha_hora|date("m/d/Y") }}</td>
+                        <td>{{ incidencia.prioridad }}</td>
+                        <td class="d-none d-sm-table-cell">{{ incidencia.estado }}</td>
+                        <td class="d-none d-lg-table-cell">{{ incidencia.categoria }}</td>
+                        <td class="d-none d-lg-table-cell">{{ incidencia.tecnico }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+{% endblock %}
