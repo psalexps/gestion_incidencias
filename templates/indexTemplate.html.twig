@@ -15,8 +15,8 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">INDUSTECH S.L.</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top mx-auto">
+    <a class="navbar-brand" href="{{ path('index') }}">INDUSTECH S.L.</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -30,13 +30,12 @@
                 <a class="nav-link" href="#">Incidencias cerradas</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="#">Estadísticas</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="#">Añadir incidencias</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0 mr-lg-5">
-            <input id="inputBuscarIncidencia" class="form-control mr-sm-2" type="search" placeholder="Buscar Incidencia" aria-label="Buscar">
-            <button id="botonBuscarIncidencia" class="my-2 my-sm-0 text-md-center d-block d-sm-block d-md-block d-lg-none d-xl-none" type="submit"><i class='fas fa-search'></i></button>
-        </form>
         <hr class="d-block d-sm-block d-md-block d-lg-none d-xl-none mr-lg-1">
         <form class="formLoggout" method="post" action="{{ path('loggout') }}">
 
@@ -46,8 +45,12 @@
     </div>
 </nav>
 
+<div class="w-100 col-12 separacionNav"></div>
+
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
+
+<div class="w-100 col-12 separacionFooter"></div>
 
 <footer class="page-footer fixed-bottom bg-secondary">
 

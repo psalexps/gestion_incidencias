@@ -29,12 +29,12 @@ class Incidencia extends ServiceEntityRepository
     private $descripcionDetallada;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $fechaHora;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="integer")
      */
     private $prioridad;
 
@@ -67,12 +67,30 @@ class Incidencia extends ServiceEntityRepository
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = 'SELECT id, descripcion_breve, descripcion_detallada, fecha_hora, prioridad, estado, (SELECT nombre from categoria WHERE id = categoria) as categoria, (SELECT nombre from usuario WHERE id = tecnico) as tecnico, (SELECT nombre from cliente WHERE id = cliente) as cliente FROM incidencia';
+        $sql = 'SELECT id, descripcion_breve, descripcion_detallada, fecha_hora, (SELECT nombre from prioridad WHERE id = prioridad) as prioridad, estado, (SELECT nombre from categoria WHERE id = categoria) as categoria, (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente FROM incidencia';
 
         $stmt = $conn->prepare($sql);
-        $stmt->execute([
+        $stmt->execute();
 
-        ]);
+        if ($stmt->rowCount() > 0){
+
+            return $stmt->fetchAll();
+        }
+        else {
+
+            return false;
+        }
+
+    }
+
+    public function getLike($busqueda){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT id, descripcion_breve, descripcion_detallada, fecha_hora, (SELECT nombre from prioridad WHERE id = prioridad) as prioridad, estado, (SELECT nombre from categoria WHERE id = categoria) as categoria, (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente FROM incidencia WHERE descripcion_breve LIKE "%'.$busqueda.'%" OR fecha_hora LIKE "%'.$busqueda.'%" OR prioridad LIKE "%'.$busqueda.'%" OR estado LIKE "%'.$busqueda.'%" OR categoria LIKE "%'.$busqueda.'%" OR tecnico LIKE "%'.$busqueda.'%";';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
 
         if ($stmt->rowCount() > 0){
 

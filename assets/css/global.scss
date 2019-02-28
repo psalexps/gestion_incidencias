@@ -13,6 +13,16 @@ body {
   background-size: cover;
 }
 
+.separacionNav, .separacionFooter {
+
+  height: 3vh;
+}
+
+.tablaDatosIncidencia {
+
+  //background: none;
+}
+
 //Login
 .mainLogin {
 
@@ -36,24 +46,23 @@ body {
   font-weight: 500;
 }
 
-#inputBuscarIncidencia, .formLogin input[type="email"], .formLogin input[type="password"] {
+.inputBuscarIncidencia, .formLogin input[type="email"], .formLogin input[type="password"] {
 
   background: none;
   text-align: center;
   border: 2px solid #3498db;
-  padding: 14px 10px;
   outline: white;
   color: black;
   border-radius: 24px;
   transition: 0.25s;
 }
 
-#inputBuscarIncidencia {
+.inputBuscarIncidencia {
 
   width: 200px;
 }
 
-#inputBuscarIncidencia:focus {
+.inputBuscarIncidencia:focus {
 
   border-color: #2ecc71;
 }

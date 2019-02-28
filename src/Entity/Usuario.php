@@ -58,7 +58,7 @@ class Usuario extends ServiceEntityRepository implements UserInterface
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = 'SELECT id FROM usuario WHERE email = :email and password = :password';
+        $sql = 'SELECT id, tipo FROM usuario WHERE email = :email and password = :password';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute([
@@ -68,7 +68,7 @@ class Usuario extends ServiceEntityRepository implements UserInterface
 
         if ($stmt->rowCount() > 0){
 
-            return true;
+            return $stmt->fetchAll();
         }
         else {
 

@@ -2,15 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Categoria;
 use App\Entity\Incidencia;
+use App\Entity\Prioridad;
 use App\Entity\Usuario;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class UsuarioController extends AbstractController
-{
+class UsuarioController extends AbstractController{
 
     /**
      * @Route("/", name="index")
@@ -28,13 +29,19 @@ class UsuarioController extends AbstractController
         else {
 
             $incidencia = new Incidencia($this->getDoctrine());
-
             $incidencias = $incidencia->getAll();
 
-            return $this->render('index/index.html.twig', [
-                'incidencias' => $incidencias
-            ]);
+            $prioridad = new Prioridad($this->getDoctrine());
+            $prioridades = $prioridad->getAll();
 
+            $categoria = new Categoria($this->getDoctrine());
+            $categorias = $categoria->getAll();
+
+            return $this->render('index/index.html.twig', [
+                'incidencias' => $incidencias,
+                'prioridades' => $prioridades,
+                'categorias' => $categorias
+            ]);
         }
     }
 
@@ -54,12 +61,19 @@ class UsuarioController extends AbstractController
                 $_SESSION['login'] = true;
 
                 $incidencia = new Incidencia($this->getDoctrine());
-
                 $incidencias = $incidencia->getAll();
 
+                $prioridad = new Prioridad($this->getDoctrine());
+                $prioridades = $prioridad->getAll();
+
+                $categoria = new Categoria($this->getDoctrine());
+                $categorias = $categoria->getAll();
+
                 return $this->render('index/index.html.twig', [
-                        'incidencias' => $incidencias
-                    ]);
+                    'incidencias' => $incidencias,
+                    'prioridades' => $prioridades,
+                    'categorias' => $categorias
+                ]);
             }
             else {
 

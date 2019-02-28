@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\CategoriaRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PrioridadRepository")
  */
-class Categoria extends ServiceEntityRepository
+class Prioridad extends ServiceEntityRepository
 {
     /**
      * @ORM\Id()
@@ -18,26 +18,21 @@ class Categoria extends ServiceEntityRepository
      */
     private $id;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=25)
      */
     private $nombre;
 
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Categoria::class);
+        parent::__construct($registry, Prioridad::class);
     }
 
     public function getAll(){
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = 'SELECT id, nombre FROM categoria';
+        $sql = 'SELECT id, nombre FROM prioridad';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -51,6 +46,11 @@ class Categoria extends ServiceEntityRepository
             return false;
         }
 
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     /**
