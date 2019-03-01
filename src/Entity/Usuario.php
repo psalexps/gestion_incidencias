@@ -77,6 +77,26 @@ class Usuario extends ServiceEntityRepository implements UserInterface
 
     }
 
+    public function getAll(){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT id, nombre FROM usuario WHERE tipo = "tecnico"';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0){
+
+            return $stmt->fetchAll();
+        }
+        else {
+
+            return false;
+        }
+
+    }
+
     public function getId(): ?int
     {
         return $this->id;

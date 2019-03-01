@@ -32,9 +32,11 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Estadísticas</a>
             </li>
+            {% if tipo == 'tecnico' %}
             <li class="nav-item">
-                <a class="nav-link" href="#">Añadir incidencias</a>
+                <a class="nav-link" href="{{ path('ventanaNuevaIncidencia') }}">Añadir incidencias</a>
             </li>
+            {% endif %}
         </ul>
         <hr class="d-block d-sm-block d-md-block d-lg-none d-xl-none mr-lg-1">
         <form class="formLoggout" method="post" action="{{ path('loggout') }}">
@@ -48,7 +50,6 @@
 <div class="w-100 col-12 separacionNav"></div>
 
 {% block body %}{% endblock %}
-{% block javascripts %}{% endblock %}
 
 <div class="w-100 col-12 separacionFooter"></div>
 

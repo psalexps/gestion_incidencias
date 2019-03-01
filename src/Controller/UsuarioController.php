@@ -13,6 +13,29 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class UsuarioController extends AbstractController{
 
+    private function ipc(){
+
+        $incidencia = new Incidencia($this->getDoctrine());
+        $incidencias = $incidencia->getAll();
+
+        $prioridad = new Prioridad($this->getDoctrine());
+        $prioridades = $prioridad->getAll();
+
+        $categoria = new Categoria($this->getDoctrine());
+        $categorias = $categoria->getAll();
+
+        $tecnico = new Usuario($this->getDoctrine());
+        $tecnicos = $tecnico->getAll();
+
+        return $this->render('index/index.html.twig', [
+            'incidencias' => $incidencias,
+            'prioridades' => $prioridades,
+            'categorias' => $categorias,
+            'tecnicos' => $tecnicos,
+            'tipo' => $_SESSION['tipo']
+        ]);
+    }
+
     /**
      * @Route("/", name="index")
      */
@@ -28,20 +51,7 @@ class UsuarioController extends AbstractController{
         }
         else {
 
-            $incidencia = new Incidencia($this->getDoctrine());
-            $incidencias = $incidencia->getAll();
-
-            $prioridad = new Prioridad($this->getDoctrine());
-            $prioridades = $prioridad->getAll();
-
-            $categoria = new Categoria($this->getDoctrine());
-            $categorias = $categoria->getAll();
-
-            return $this->render('index/index.html.twig', [
-                'incidencias' => $incidencias,
-                'prioridades' => $prioridades,
-                'categorias' => $categorias
-            ]);
+            return $this->ipc();
         }
     }
 
@@ -58,22 +68,11 @@ class UsuarioController extends AbstractController{
 
             if($usuario->login()){
 
+                $_SESSION['tipo'] = $usuario->login()[0]["tipo"];
+
                 $_SESSION['login'] = true;
 
-                $incidencia = new Incidencia($this->getDoctrine());
-                $incidencias = $incidencia->getAll();
-
-                $prioridad = new Prioridad($this->getDoctrine());
-                $prioridades = $prioridad->getAll();
-
-                $categoria = new Categoria($this->getDoctrine());
-                $categorias = $categoria->getAll();
-
-                return $this->render('index/index.html.twig', [
-                    'incidencias' => $incidencias,
-                    'prioridades' => $prioridades,
-                    'categorias' => $categorias
-                ]);
+                return $this->ipc();
             }
             else {
 

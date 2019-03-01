@@ -67,7 +67,11 @@ class Incidencia extends ServiceEntityRepository
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = 'SELECT id, descripcion_breve, descripcion_detallada, fecha_hora, (SELECT nombre from prioridad WHERE id = prioridad) as prioridad, estado, (SELECT nombre from categoria WHERE id = categoria) as categoria, (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente FROM incidencia';
+        $sql = 'SELECT id, descripcion_breve, descripcion_detallada, fecha_hora,
+                (SELECT nombre from prioridad WHERE id = prioridad) as prioridad, estado,
+                (SELECT nombre from categoria WHERE id = categoria) as categoria,
+                (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente
+                FROM incidencia';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -83,14 +87,97 @@ class Incidencia extends ServiceEntityRepository
 
     }
 
-    public function getLike($busqueda){
+    public function getDesc($busqueda){
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = 'SELECT id, descripcion_breve, descripcion_detallada, fecha_hora, (SELECT nombre from prioridad WHERE id = prioridad) as prioridad, estado, (SELECT nombre from categoria WHERE id = categoria) as categoria, (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente FROM incidencia WHERE descripcion_breve LIKE "%'.$busqueda.'%" OR fecha_hora LIKE "%'.$busqueda.'%" OR prioridad LIKE "%'.$busqueda.'%" OR estado LIKE "%'.$busqueda.'%" OR categoria LIKE "%'.$busqueda.'%" OR tecnico LIKE "%'.$busqueda.'%";';
+        $sql = 'SELECT id, descripcion_breve, descripcion_detallada, fecha_hora,
+                (SELECT nombre from prioridad WHERE id = prioridad) as prioridad, estado,
+                (SELECT nombre from categoria WHERE id = categoria) as categoria,
+                (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente
+                FROM incidencia
+                WHERE descripcion_breve LIKE "%'.$busqueda.'%"';
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
+
+        if ($stmt->rowCount() > 0){
+
+            return $stmt->fetchAll();
+        }
+        else {
+
+            return false;
+        }
+
+    }
+
+    public function getFecha($busqueda){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT id, descripcion_breve, descripcion_detallada, fecha_hora,
+                (SELECT nombre from prioridad WHERE id = prioridad) as prioridad, estado,
+                (SELECT nombre from categoria WHERE id = categoria) as categoria,
+                (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente
+                FROM incidencia
+                WHERE fecha_hora LIKE "%'.$busqueda.'%"';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        if ($stmt->rowCount() > 0){
+
+            return $stmt->fetchAll();
+        }
+        else {
+
+            return false;
+        }
+
+    }
+
+    public function getPrioridadBusqueda($busqueda){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT i.id, i.descripcion_breve, i.descripcion_detallada, i.fecha_hora, p.nombre as prioridad, i.estado,
+                (SELECT nombre from categoria WHERE id = categoria) as categoria, 
+                (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente
+                FROM incidencia i, prioridad p
+                WHERE i.prioridad = p.id and p.id = :idPrioridad';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'idPrioridad' => $busqueda
+        ]);
+
+        if ($stmt->rowCount() > 0){
+
+            return $stmt->fetchAll();
+        }
+        else {
+
+            return false;
+        }
+
+    }
+
+    public function getCategoriaBusqueda($busqueda){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'SELECT i.id, i.descripcion_breve, i.descripcion_detallada, i.fecha_hora,
+                (SELECT nombre from prioridad WHERE id = prioridad) as prioridad, i.estado,
+                c.nombre as categoria, 
+                (SELECT nombre from usuario WHERE id = tecnico) as tecnico, cliente
+                FROM incidencia i, categoria c
+                WHERE i.categoria = c.id and c.id = :idCategoria';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'idCategoria' => $busqueda
+        ]);
 
         if ($stmt->rowCount() > 0){
 
