@@ -1,5 +1,5 @@
 <?php
-die(var_dump("s"));
+
 require __DIR__.'/../vendor/autoload.php';
 session_start();
 
@@ -8,7 +8,7 @@ use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
 require dirname(__DIR__).'/config/bootstrap.php';
-
+die(var_dump("s"));
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
