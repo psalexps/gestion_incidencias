@@ -26,6 +26,16 @@ class Comentario
      */
     private $incidencia;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $fechaHora;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $tecnico;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,6 +72,39 @@ class Comentario
     {
         $this->incidencia = $incidencia;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFechaHora()
+    {
+        return $this->fechaHora;
+    }
+
+    /**
+     * @param mixed $fechaHora
+     */
+    public function setFechaHora($fechaHora)
+    {
+        $this->fechaHora = $fechaHora;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTecnico()
+    {
+        return $this->tecnico;
+    }
+
+    /**
+     * @param mixed $tecnico
+     */
+    public function setTecnico($tecnico)
+    {
+        $this->tecnico = $tecnico;
+    }
+
 
 
 }

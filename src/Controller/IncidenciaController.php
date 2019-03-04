@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Categoria;
+use App\Entity\Cliente;
 use App\Entity\Incidencia;
 use App\Entity\Prioridad;
 use App\Entity\Usuario;
@@ -13,12 +14,11 @@ class IncidenciaController extends AbstractController{
 
     private function ipc($view,$get,$post){
 
-        if ($post == ''){
+        if ($post == '') {
 
             $incidencia = new Incidencia($this->getDoctrine());
             $incidencias = $incidencia->$get();
-        }
-        else {
+        } else {
 
             $incidencia = new Incidencia($this->getDoctrine());
             $incidencias = $incidencia->$get($_POST[$post]);
@@ -40,13 +40,40 @@ class IncidenciaController extends AbstractController{
             'tecnicos' => $tecnicos,
             'tipo' => $_SESSION['tipo']
         ]);
+
+    }
+
+    private function comprobarLogin(){
+
+        if (!empty($_SESSION['login']) && !empty($_SESSION['tipo'])) {
+
+            return true;
+
+        }
+        else {
+
+            return false;
+        }
+
+    }
+
+    private function comprobarUsuario(){
+
+        if ($_SESSION['tipo'] == 'empleado') {
+
+            return true;
+        }
+        else {
+
+            return false;
+        }
     }
 
     /**
      * @Route("/incidencia", name="incidencia")
      */
-    public function index()
-    {
+    public function index(){
+
         return $this->render('incidencia/index.html.twig');
     }
 
@@ -55,28 +82,45 @@ class IncidenciaController extends AbstractController{
      */
     public function busqueda(){
 
-        if (isset($_POST['buscarIncidencia'])) {
+        if ($this->comprobarLogin()){
 
-            if (empty($_POST['fechaIncidencia']) && empty($_POST['prioridadIncidencia']) && empty($_POST['categoriaIncidencia'])){
+            if ($this->comprobarUsuario()) {
 
-                return $this->ipc('index/index.html.twig','getDesc','descripcionIncidencia');
+                if (isset($_POST['buscarIncidencia'])) {
+
+                    if (empty($_POST['fechaIncidencia']) && empty($_POST['prioridadIncidencia']) && empty($_POST['categoriaIncidencia'])){
+
+                        return $this->ipc('index/index.html.twig','getDesc','descripcionIncidencia');
+                    }
+                    elseif (empty($_POST['descripcionIncidencia']) && empty($_POST['prioridadIncidencia']) && empty($_POST['categoriaIncidencia'])){
+
+                        return $this->ipc('index/index.html.twig','getFecha','fechaIncidencia');
+                    }
+                    elseif (empty($_POST['descripcionIncidencia']) && empty($_POST['fechaIncidencia']) && empty($_POST['categoriaIncidencia'])){
+
+                        return $this->ipc('index/index.html.twig','getPrioridadBusqueda','prioridadIncidencia');
+                    }
+                    elseif (empty($_POST['descripcionIncidencia']) && empty($_POST['fechaIncidencia']) && empty($_POST['prioridadIncidencia'])){
+
+                        return $this->ipc('index/index.html.twig','getCategoriaBusqueda','categoriaIncidencia');
+                    }
+
+                }
+
+                return $this->ipc('index/index.html.twig','getAll','');
             }
-            elseif (empty($_POST['descripcionIncidencia']) && empty($_POST['prioridadIncidencia']) && empty($_POST['categoriaIncidencia'])){
+            else {
 
-                return $this->ipc('index/index.html.twig','getFecha','fechaIncidencia');
-            }
-            elseif (empty($_POST['descripcionIncidencia']) && empty($_POST['fechaIncidencia']) && empty($_POST['categoriaIncidencia'])){
-
-                return $this->ipc('index/index.html.twig','getPrioridadBusqueda','prioridadIncidencia');
-            }
-            elseif (empty($_POST['descripcionIncidencia']) && empty($_POST['fechaIncidencia']) && empty($_POST['prioridadIncidencia'])){
-
-                return $this->ipc('index/index.html.twig','getCategoriaBusqueda','categoriaIncidencia');
+                return $this->ipc('index/index.html.twig', 'getAll', '');
             }
 
         }
+        else {
 
-        return $this->ipc('index/index.html.twig','getAll','');
+            return $this->render('login/login.html.twig', [
+                'error' => false
+            ]);
+        }
     }
 
     /**
@@ -84,22 +128,58 @@ class IncidenciaController extends AbstractController{
      */
     public function nuevaIncidencia(){
 
-        if (isset($_POST['descBIncidencia'])){
+        if ($this->comprobarLogin()){
 
-            $incidencia = new Incidencia($this->getDoctrine());
-            $incidencia->setDescripcionBreve($_POST['descBIncidencia']);
-            $incidencia->setDescripcionDetallada($_POST['descDIncidencia']);
-            $incidencia->setFechaHora(date('m/d/Y g:i'));
-            $incidencia->setPrioridad($_POST['prioridadNuevaIncidencia']);
-            $incidencia->setCategoria($_POST['nuevacategoriaNuevaIncidencia']);
-            $incidencia->setTecnico($_POST['tecnicoIncidencia']);
+            if ($this->comprobarUsuario()) {
+
+                if (isset($_POST['descBIncidencia'])) {
+
+                    $cliente = new Cliente($this->getDoctrine());
+                    $cliente->setNombre($_POST['nombreCliente']);
+                    $cliente->setApellidos($_POST['apellidosCliente']);
+                    $cliente->setEmail($_POST['emailCliente']);
+                    $cliente->setTelefono($_POST['telefonoCliente']);
+                    $cliente->insert();
+
+                    $incidencia = new Incidencia($this->getDoctrine());
+                    $incidencia->setDescripcionBreve($_POST['descBIncidencia']);
+                    $incidencia->setDescripcionDetallada($_POST['descDIncidencia']);
+                    $incidencia->setFechaHora(date('Y/m/d g:i:s'));
+                    $incidencia->setPrioridad($_POST['prioridadNuevaIncidencia']);
+                    $incidencia->setEstado('abierta');
+
+                    if ($_POST['nuevacategoriaNuevaIncidencia'] == ""){
+
+                        $incidencia->setCategoria($_POST['categoriaNuevaIncidencia']);
+                    }
+                    else {
+
+                        $categoria = new Categoria($this->getDoctrine());
+                        $categoria->setNombre($_POST['nuevacategoriaNuevaIncidencia']);
+                        $categoria->insert();
+                        $incidencia->setCategoria($categoria->getId());
+                    }
+
+                    $incidencia->setTecnico($_POST['tecnicoIncidencia']);
+                    $incidencia->setCliente($cliente->getId());
+                    $incidencia->insert();
+
+                }
+
+                return $this->ipc('index/index.html.twig', 'getAll', '');
+            }
+            else {
+
+                return $this->ipc('index/index.html.twig', 'getAll', '');
+            }
 
         }
+        else {
 
-
-        return $this->ipc('index/index.html.twig','getAll','');
-
-
+            return $this->render('login/login.html.twig', [
+                'error' => false
+            ]);
+        }
     }
 
     /**
@@ -107,7 +187,24 @@ class IncidenciaController extends AbstractController{
      */
     public function ventanaNuevaIncidencia(){
 
-        return $this->ipc('incidencia/nuevaIncidencia.html.twig','getAll','');
+        if ($this->comprobarLogin()){
+
+            if ($this->comprobarUsuario()) {
+
+                return $this->ipc('incidencia/nuevaIncidencia.html.twig', 'getAll', '');
+            }
+            else {
+
+                return $this->ipc('index/index.html.twig', 'getAll', '');
+            }
+
+        }
+        else {
+
+            return $this->render('login/login.html.twig', [
+                'error' => false
+            ]);
+        }
 
     }
 

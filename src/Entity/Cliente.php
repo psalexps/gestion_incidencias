@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClienteRepository")
  */
-class Cliente
+class Cliente extends ServiceEntityRepository
 {
     /**
      * @ORM\Id()
@@ -36,9 +38,40 @@ class Cliente
      */
     private $telefono;
 
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, Cliente::class);
+    }
+
+    public function insert(){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'INSERT into cliente(nombre,apellidos,email,telefono) VALUES(:nombre,:apellidos,:email,:telefono)';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'nombre' => $this->nombre,
+            'apellidos' => $this->apellidos,
+            'email' => $this->email,
+            'telefono' => $this->telefono
+        ]);
+
+        $this->setId($conn->lastInsertId());
+
+    }
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

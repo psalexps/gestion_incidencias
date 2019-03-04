@@ -63,6 +63,27 @@ class Incidencia extends ServiceEntityRepository
         parent::__construct($registry, Incidencia::class);
     }
 
+    public function insert(){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'INSERT into incidencia(descripcion_breve,descripcion_detallada,fecha_hora,prioridad,estado,categoria,tecnico,cliente)
+                VALUES(:descripcion_breve,:descripcion_detallada,:fecha_hora,:prioridad,:estado,:categoria,:tecnico,:cliente)';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'descripcion_breve' => $this->descripcionBreve,
+            'descripcion_detallada' => $this->descripcionDetallada,
+            'fecha_hora' => $this->fechaHora,
+            'prioridad' => $this->prioridad,
+            'estado' => $this->estado,
+            'categoria' => $this->categoria,
+            'tecnico' => !empty($this->tecnico) ? $this->tecnico : NULL,
+            'cliente' => $this->cliente
+        ]);
+
+    }
+
     public function getAll(){
 
         $conn = $this->getEntityManager()->getConnection();

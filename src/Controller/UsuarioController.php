@@ -95,6 +95,7 @@ class UsuarioController extends AbstractController{
     public function loggout(){
 
         $_SESSION['login'] = false;
+        $_SESSION['tipo'] = null;
 
         return $this->index();
     }

@@ -1,6 +1,6 @@
 {% extends 'indexTemplate.html.twig' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Gestor incidencias{% endblock %}
 
 {% block body %}
 
@@ -49,7 +49,13 @@
                         <td>{{ incidencia.prioridad }}</td>
                         <td class="d-none d-sm-table-cell">{{ incidencia.estado }}</td>
                         <td class="d-none d-lg-table-cell">{{ incidencia.categoria }}</td>
-                        <td class="d-none d-lg-table-cell">{{ incidencia.tecnico }}</td>
+                        <td class="d-none d-lg-table-cell">
+                            {% if incidencia.tecnico == "" %}
+                                Sin asignar
+                                {% else %}
+                                    {{ incidencia.tecnico }}
+                            {% endif %}
+                        </td>
                     </tr>
                     {% else %}
                         <tr><td colspan="6">No hay datos</td></tr>

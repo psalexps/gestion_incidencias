@@ -24,6 +24,16 @@ class Categoria extends ServiceEntityRepository
     }
 
     /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+
+
+    /**
      * @ORM\Column(type="string", length=100)
      */
     private $nombre;
@@ -31,6 +41,21 @@ class Categoria extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Categoria::class);
+    }
+
+    public function insert(){
+
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = 'INSERT into categoria(nombre) VALUES(:nombre)';
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            'nombre' => $this->nombre
+        ]);
+
+        $this->setId($conn->lastInsertId());
+
     }
 
     public function getAll(){
