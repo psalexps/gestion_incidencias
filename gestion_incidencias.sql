@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-03-2019 a las 13:59:21
+-- Tiempo de generación: 04-03-2019 a las 12:37:58
 -- Versión del servidor: 10.1.28-MariaDB
 -- Versión de PHP: 7.1.10
 
@@ -39,7 +39,8 @@ CREATE TABLE `categoria` (
 
 INSERT INTO `categoria` (`id`, `nombre`) VALUES
 (1, 'Informática'),
-(2, 'Matenimiento');
+(2, 'Matenimiento'),
+(5, 'nuevaX');
 
 -- --------------------------------------------------------
 
@@ -60,7 +61,13 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`id`, `nombre`, `apellidos`, `email`, `telefono`) VALUES
-(1, 'Juan', 'Lopez Carneiro', 'juan@gmail.com', '987678923');
+(1, 'Juan', 'Lopez Carneiro', 'juan@gmail.com', '987678923'),
+(12, 'Alex', 'Luiz', 'alex@gmail.com', '945738483'),
+(20, 'Alex', 'Luiz', 'alex@gmail.com', '945738483'),
+(21, 'Alex', 'Luiz', 'alex@gmail.com', '945738483'),
+(22, '', '', '', ''),
+(23, 'Alex', 'Luiz', 'alex@gmail.com', '945738483'),
+(24, 'Alex', 'Luiz', 'alex@gmail.com', '945738483');
 
 -- --------------------------------------------------------
 
@@ -70,7 +77,9 @@ INSERT INTO `cliente` (`id`, `nombre`, `apellidos`, `email`, `telefono`) VALUES
 
 CREATE TABLE `comentario` (
   `id` int(11) NOT NULL,
+  `tecnico` int(11) NOT NULL,
   `descripcion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fecha_hora` datetime NOT NULL,
   `incidencia` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -78,8 +87,8 @@ CREATE TABLE `comentario` (
 -- Volcado de datos para la tabla `comentario`
 --
 
-INSERT INTO `comentario` (`id`, `descripcion`, `incidencia`) VALUES
-(1, 'Intenta apagar la impresora y volver a encenderla.', 1);
+INSERT INTO `comentario` (`id`, `tecnico`, `descripcion`, `fecha_hora`, `incidencia`) VALUES
+(1, 1, 'Intenta apagar la impresora y volver a encenderla.', '0000-00-00 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -106,7 +115,10 @@ CREATE TABLE `incidencia` (
 INSERT INTO `incidencia` (`id`, `descripcion_breve`, `descripcion_detallada`, `fecha_hora`, `prioridad`, `estado`, `categoria`, `tecnico`, `cliente`) VALUES
 (1, 'Problemas con la máquina x', 'La programación de la máquina x se ha desconfigurado y no funciona bien.', '2019-02-23 12:20:00', 1, 'Abierta', 1, 1, 1),
 (2, 'Máquina xeoh parada', 'La máquina xeoh se ha detenido y no arranca.', '2019-02-21 10:30:00', 2, 'Abierta', 1, 1, 1),
-(3, 'Servidor caido', 'El servidor de la planta 1 se ha apagado.', '2019-02-26 02:10:00', 3, 'Cerrada', 2, 1, 1);
+(3, 'Servidor caido', 'El servidor de la planta 1 se ha apagado.', '2019-02-26 02:10:00', 3, 'Cerrada', 2, 1, 1),
+(9, 'Problemas', 'en serioooo', '2019-03-04 12:06:55', 4, 'abierta', 5, 2, 12),
+(20, 'dede', 'aedaed', '2019-03-04 12:26:32', 4, 'abierta', 1, NULL, 23),
+(21, 'vfgfg', 'fgfgf', '2019-03-04 12:26:51', 4, 'abierta', 1, 2, 24);
 
 -- --------------------------------------------------------
 
@@ -172,7 +184,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `nombre`, `apellidos`, `telefono`, `email`, `password`, `tipo`) VALUES
-(1, 'admin', 'admin', '666666666', 'admin@gmail.com', 'admin', 'tecnico'),
+(1, 'admin', 'admin', '666666666', 'admin@gmail.com', 'admin', 'empleado'),
 (2, 'Pepe', 'Lopez Peña', '985748533', 'pepe@gmail.com', 'pepe', 'tecnico');
 
 --
@@ -196,7 +208,8 @@ ALTER TABLE `cliente`
 --
 ALTER TABLE `comentario`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_incidencia_comentario` (`incidencia`);
+  ADD KEY `fk_incidencia_comentario` (`incidencia`),
+  ADD KEY `fk_usuario_comentario` (`tecnico`);
 
 --
 -- Indices de la tabla `incidencia`
@@ -235,13 +248,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `comentario`
@@ -253,7 +266,7 @@ ALTER TABLE `comentario`
 -- AUTO_INCREMENT de la tabla `incidencia`
 --
 ALTER TABLE `incidencia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `prioridad`
@@ -275,14 +288,14 @@ ALTER TABLE `usuario`
 -- Filtros para la tabla `comentario`
 --
 ALTER TABLE `comentario`
-  ADD CONSTRAINT `fk_incidencia_comentario` FOREIGN KEY (`incidencia`) REFERENCES `incidencia` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_incidencia_comentario` FOREIGN KEY (`incidencia`) REFERENCES `incidencia` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_usuario_comentario` FOREIGN KEY (`tecnico`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `incidencia`
 --
 ALTER TABLE `incidencia`
   ADD CONSTRAINT `fk_categoria_incidencia` FOREIGN KEY (`categoria`) REFERENCES `categoria` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_cliente_incidencia` FOREIGN KEY (`cliente`) REFERENCES `cliente` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_prioridad_incidencia` FOREIGN KEY (`prioridad`) REFERENCES `prioridad` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_tecnico_incidencia` FOREIGN KEY (`tecnico`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
