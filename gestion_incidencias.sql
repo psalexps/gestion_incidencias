@@ -175,7 +175,7 @@ CREATE TABLE `usuario` (
   `apellidos` varchar(35) COLLATE utf8mb4_unicode_ci NOT NULL,
   `telefono` varchar(9) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(35) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_thai_520_w2 NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `tipo` varchar(25) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
