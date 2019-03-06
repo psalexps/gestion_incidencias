@@ -265,9 +265,9 @@
       <path value="$PROJECT_DIR$/vendor/sensio/framework-extra-bundle" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="394" />
-    <option name="y" value="-9" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="700" />
+    <option name="y" value="174" />
     <option name="width" value="1478" />
     <option name="height" value="852" />
   </component>
