@@ -1,5 +1,5 @@
 <?php
-
+die(var_dump("s"));
 session_start();
 
 use App\Kernel;
