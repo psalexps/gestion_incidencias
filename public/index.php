@@ -1,7 +1,7 @@
 <?php
-die(var_dump("s"));
-session_start();
 
+session_start();
+die(var_dump("s"));
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
