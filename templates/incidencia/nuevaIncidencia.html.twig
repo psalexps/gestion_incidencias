@@ -1,0 +1,86 @@
+{% extends 'indexTemplate.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+        <form class="row mt-5 mb-5" method="post" action="{{ path('nuevaIncidencia') }}">
+
+            <div class="col-12 col-sm-12 col-lg-6">
+
+            <h5>Datos incidencia</h5>
+
+            <div class="form-group">
+                <label for="descBIncidencia">Descripción breve</label>
+                <input type="text" class="form-control" name="descBIncidencia" id="descBIncidencia" placeholder="Descripción breve">
+            </div>
+            <div class="form-group">
+                <label for="descDIncidencia">Descripción Detallada</label>
+                <textarea class="form-control" name="descDIncidencia" id="descDIncidencia" placeholder="Descripción detallada"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="prioridadNuevaIncidencia">Prioridad</label>
+                <select id="prioridadNuevaIncidencia" name="prioridadNuevaIncidencia" class="form-control">
+                    {% for prioridad in prioridades %}
+                        <option value="{{ prioridad.id }}">{{ prioridad.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="categoriaNuevaIncidencia">Categoría</label>
+                <input type="text" id="categoriaNuevaIncidencia" name="nuevacategoriaNuevaIncidencia" class="form-control mb-1" placeholder="nueva categoría">
+                <select id="categoriaNuevaIncidencia" name="categoriaNuevaIncidencia" class="form-control">
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="tecnicoIncidencia">tecnico</label>
+                <select id="tecnicoIncidencia" name="tecnicoIncidencia" class="form-control">
+                    <option selected value="">Ninguno</option>
+                    {% for tecnico in tecnicos %}
+                        <option value="{{ tecnico.id }}">{{ tecnico.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            </div>
+
+            <div class="col-12 col-sm-12 col-lg-6">
+
+            <h5>Datos cliente</h5>
+
+            <div class="form-group">
+                <label for="nombreCliente">Nombre</label>
+                <input type="text" class="form-control" name="nombreCliente" id="nombreCliente" placeholder="nombre">
+            </div>
+
+            <div class="form-group">
+                <label for="apellidosCliente">Apellidos</label>
+                <input type="text" class="form-control" name="apellidosCliente" id="apellidosCliente" placeholder="apellidos">
+            </div>
+
+            <div class="form-group">
+                <label for="emailCliente">E-mail</label>
+                <input type="email" class="form-control" name="emailCliente" id="emailCliente" placeholder="e-mail">
+            </div>
+
+            <div class="form-group">
+                <label for="telefonoCliente">Teléfono</label>
+                <input type="text" class="form-control" name="telefonoCliente" id="telefonoCliente" placeholder="teléfono" pattern="[6,8,9]{1}[0-9]{8}">
+            </div>
+
+            </div>
+
+            <div class="col-12 form-group text-center">
+                <button type="submit" class="btn btn-primary">Añadir incidencia</button>
+            </div>
+
+        </form>
+
+    </div>
+
+{% endblock %}

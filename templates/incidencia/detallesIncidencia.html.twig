@@ -1,0 +1,166 @@
+{% extends 'indexTemplate.html.twig' %}
+
+{% block title %}Detalles de la incidencia{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+
+        <form class="row mt-5 mb-5" method="post" action="{{ path('actualizarIncidencia',{'ii': incidencias[0]['id'],'ic': clientes[0]['id']}) }}">
+
+            <div class="col-12 col-sm-12 col-lg-6 card">
+
+                <h4 class="mt-3">Datos incidencia</h4>
+
+                <div class="form-group">
+                    <label for="descBIncidencia">Descripción breve</label>
+                    <input type="text" class="form-control" name="descBIncidencia" id="descBIncidencia" value="{{ incidencias[0]['descripcion_breve'] }}" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="descDIncidencia">Descripción Detallada</label>
+                    <textarea class="form-control" name="descDIncidencia" id="descDIncidencia" disabled>{{ incidencias[0]['descripcion_detallada'] }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="prioridadNuevaIncidencia">Prioridad</label>
+                    <select id="prioridadNuevaIncidencia" name="prioridadNuevaIncidencia" class="form-control" disabled>
+                        <option selected value="">{{ incidencias[0]['prioridad'] }}</option>
+                        {% for prioridad in prioridades %}
+                            <option value="{{ prioridad.id }}">{{ prioridad.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="categoriaNuevaIncidencia">Categoría</label>
+                    <select id="categoriaNuevaIncidencia" name="categoriaNuevaIncidencia" class="form-control" disabled>
+                        <option selected value="">{{ incidencias[0]['categoria'] }}</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% if incidencias[0]['estado'] == 'Cerrada' %}
+
+                    <div class="form-group">
+                        <label for="tecnicoIncidencia">tecnico</label>
+                        <select id="tecnicoIncidencia" name="tecnicoIncidencia" class="form-control" disabled>
+                            <option selected value="">{{ incidencias[0]['tecnico'] }}</option>
+                            {% for tecnico in tecnicos %}
+                                <option value="{{ tecnico.id }}">{{ tecnico.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                {% else %}
+                    <div class="form-group">
+                        <label for="tecnicoIncidencia">tecnico</label>
+                        <select id="tecnicoIncidencia" name="tecnicoIncidencia" class="form-control">
+                            <option selected value="">{{ incidencias[0]['tecnico'] }}</option>
+                            {% for tecnico in tecnicos %}
+                                <option value="{{ tecnico.id }}">{{ tecnico.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div class="col-12 col-sm-12 col-lg-6 card">
+
+                <h4 class="mt-3">Datos cliente</h4>
+
+                {% if incidencias[0]['estado'] == 'Cerrada' %}
+
+                    <div class="form-group">
+                        <label for="nombreCliente">Nombre</label>
+                        <input type="text" class="form-control" name="nombreCliente" id="nombreCliente" value="{{ clientes[0]['nombre'] }}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="apellidosCliente">Apellidos</label>
+                        <input type="text" class="form-control" name="apellidosCliente" id="apellidosCliente" value="{{ clientes[0]['apellidos'] }}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="emailCliente">E-mail</label>
+                        <input type="email" class="form-control" name="emailCliente" id="emailCliente" value="{{ clientes[0]['email'] }}" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefonoCliente">Teléfono</label>
+                        <input type="text" class="form-control" name="telefonoCliente" id="telefonoCliente" placeholder="teléfono" value="{{ clientes[0]['telefono'] }}" pattern="[6,8,9]{1}[0-9]{8}" disabled>
+                    </div>
+
+                    {% else %}
+
+                        <div class="form-group">
+                            <label for="nombreCliente">Nombre</label>
+                            <input type="text" class="form-control" name="nombreCliente" id="nombreCliente" value="{{ clientes[0]['nombre'] }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="apellidosCliente">Apellidos</label>
+                            <input type="text" class="form-control" name="apellidosCliente" id="apellidosCliente" value="{{ clientes[0]['apellidos'] }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="emailCliente">E-mail</label>
+                            <input type="email" class="form-control" name="emailCliente" id="emailCliente" value="{{ clientes[0]['email'] }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefonoCliente">Teléfono</label>
+                            <input type="text" class="form-control" name="telefonoCliente" id="telefonoCliente" placeholder="teléfono" value="{{ clientes[0]['telefono'] }}" pattern="[6,8,9]{1}[0-9]{8}">
+                        </div>
+
+                        <div class="form-group col-12 mt-5">
+                            <button type="submit" class="col-12 col-sm-5 col-md-5 btn btn-primary float-right mb-1 mb-sm-0">Actualizar incidencia</button>
+                            <a href="{{ path('cerrarIncidencia',{'ii': incidencias[0]['id']}) }}" class="col-12 col-sm-5 col-md-5 btn btn-warning float-left">Archivar incidencia</a>
+                        </div>
+                {% endif %}
+
+            </div>
+
+        </form>
+
+        <div class="row card mb-5">
+
+        <h3 class="col-12 mt-5 mb-3 text-center">Anotaciones</h3>
+
+        {% for anotacion in anotaciones %}
+
+        <div class="col-12 mb-5">
+            <h5 class="float-left">{{ anotacion.tecnico }}</h5>
+            <h5 class="float-right">{{ anotacion.fecha_hora|date("d/m/Y H:i") }}</h5>
+            <textarea class="form-control" disabled>{{ anotacion.descripcion }}</textarea>
+        </div>
+
+            {% else %}
+
+                <div class="col-12 mb-5">
+                    <p class="text-center">No hay datos</p>
+                </div>
+
+        {% endfor %}
+
+        {% if incidencias[0]['estado'] == 'Cerrada' %}
+        {% else %}
+            <form class="col-12 mb-5" method="post" action="{{ path('nuevaAnotacion',{'ii': incidencias[0]['id']}) }}">
+
+                <div class="form-group">
+                    <label for="anotacion">Nueva anotación</label>
+                    <textarea id="anotacion" name="anotacion" class="form-control" placeholder="nueva anotación" required></textarea>
+                </div>
+
+                <div class="col-12 form-group text-center">
+                    <button type="submit" class="btn btn-primary">Añadir anotación</button>
+                </div>
+
+            </form>
+        {% endif %}
+
+        </div>
+
+    </div>
+
+{% endblock %}
