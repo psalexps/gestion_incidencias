@@ -10574,6 +10574,7 @@ a.text-dark:focus {
 }
 
 body {
+    font-family: "Newton", SansSerif;
   background: url(/build/images/fondo_login.065a2851.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
