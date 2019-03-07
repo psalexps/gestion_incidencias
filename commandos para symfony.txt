@@ -1,4 +1,4 @@
-crud : https://symfony.com/doc/current/doctrine.html
+﻿crud : https://symfony.com/doc/current/doctrine.html
 
 
 
@@ -38,35 +38,3 @@ crud : https://symfony.com/doc/current/doctrine.html
 
 
 
-
-    $('#liCerradas').click(function () {
-
-        $('#iAbiertas').removeClass('active');
-        $('#estadisticas').removeClass('active');
-        $('#nIncidencia').removeClass('active');
-        $('#iCerradas').addClass('active');
-    });
-
-    $('#liAbiertas').click(function () {
-
-        $('#iCerradas').removeClass('active');
-        $('#estadisticas').removeClass('active');
-        $('#nIncidencia').removeClass('active');
-        $('#iAbiertas').addClass('active');
-    });
-
-    $('#lEstadisticas').click(function () {
-
-        $('#iAbiertas').removeClass('active');
-        $('#iCerradas').removeClass('active');
-        $('#nIncidencia').removeClass('active');
-        $('#estadisticas').addClass('active');
-    });
-
-    $('#lnIncidencia').click(function () {
-
-        $('#iAbiertas').removeClass('active');
-        $('#estadisticas').removeClass('active');
-        $('#iCerradas').removeClass('active');
-        $('#nIncidencia').addClass('active');
-    });
